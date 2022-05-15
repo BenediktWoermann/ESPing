@@ -1,9 +1,9 @@
 #include <FastLED.h>
 
-#define ledQuantity 150
+#define ledQuantity 142
 #define ledRows 7
 #define ledColumns 22
-#define dataPin 13
+#define dataPin 26
 
 extern CRGB leds[ledQuantity];
 extern CRGB* display[ledRows][ledColumns];

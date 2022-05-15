@@ -18,6 +18,7 @@
 
 #pragma region include
   #include <Arduino.h>
+  #include <FreeRTOS.h>
   #include <WiFi.h>
   #include <mDNS.h>
   #include <WiFiUdp.h>
@@ -31,13 +32,20 @@
   #include "main.h"
   #include "OTA.h"
   #include "weather.h"
-  #include "brawl.h"
   #include "util.h"
   #include "webserver2.h"
   #include "display.h"
   #include "background.h"
   #include "credentials.h"
 #pragma endregion include
+
+#pragma region taskVariables
+TaskHandle_t ledHandle = NULL;
+TaskHandle_t dataHandle = NULL;
+
+void ledTask(void* parameter);
+void dataTask(void* parameter);
+#pragma endregion taskVariables
 
 #pragma region globalVariables
 
@@ -46,8 +54,8 @@
 // enum backgrounds {RAINBOW, STATIC};
 long colorBG;
 long colorFG;
-int activeMode = OFFLINE;
-int activeBackground = STATIC;
+int activeMode = CLEAR;
+int activeBackground = RAINBOW;
 
 Ticker blinkerSeconds;
 
@@ -78,20 +86,6 @@ const char htmlPage[]PROGMEM=R"=====(
   </html>
   )=====";
 
-char const * brawlServername = BRAWLAPISERVER;
-String playerID = "PC2J0V08V";
-// String playerID = "RJGPYVP9";
-// String playerID = "9R8Y820P";
-int32_t lastBrawlQuery = -6000;
-int brawlState = 0; // 0: no connection to api      1: connected      2: requested      3: answer received      4=0: answer parsed/no connection to api
-
-char* brawlResult;
-char* brawlInfoOnServer;
-int brawlInfoOnDisplay = 0;
-
-char const * brawlername = "{";
-char const * identifier = "trophies";
-
 char const * weatherServername = "api.openweathermap.org";
 const String cityID = CITYID;
 const String  apiKey = WEATHERAPIKEY;
@@ -100,7 +94,6 @@ String weatherResult = "";
 float temperature = 0;
 
 WebServer server(80);
-WiFiClient brawlClient;
 WiFiClient weatherClient;
 
 WiFiServer telnetServer(23);
@@ -111,48 +104,15 @@ uint16_t time_elapsed = 0;
 
 #pragma endregion globalVariables
 
-void handleTimerInterrupt(){
-  Serial.println("Interupt started!");
-  switch(activeBackground){
-    case RAINBOW: 
-                  {
-                  int rainbowBrightness = ((colorBG%256)+((colorBG/256)%256)+(colorBG%256%256))/3;
-                  rainbowbg(0.1, rainbowBrightness);
-                  break;
-                  }
-    case STATIC:
-                  staticbg(colorBG);
-                  break;
-    default:      
-                  staticbg(0x000000);
-                  break;
-  }
-  
-  switch(activeMode){
-    case OFFLINE:
-                animateWifiError(1,8, 0xff0000);
-                break;
-    case TIME: 
-                writeTime(timeClient.getHours(), timeClient.getMinutes(), colorFG);
-                FastLED.show();
-                break;
-    case WEATHER:
-                writeTemp(temperature, colorFG);
-                FastLED.show();
-                break;
-    case BRAWLSTARS:
-                if(brawlResult == NULL) break;
-                writeNumber(brawlInfoOnDisplay, colorFG);
-                FastLED.show();
-                break;
-    default:
-                FastLED.show();
-                break;
-  }
-  Serial.println("Interupt done!");
+
+void setupTasks(){
+  xTaskCreatePinnedToCore(ledTask, "led", 4096, NULL, 1, &ledHandle, 0);
+  xTaskCreatePinnedToCore(dataTask, "data", 4096, NULL, 1, &dataHandle, 1);
 }
 
 void setup() {
+  setupTasks();
+
   if(wifiSetup()){
     serverSetup();
     setupOTA();
@@ -186,39 +146,89 @@ void setup() {
   setupLED();  
 
   FastLED.showColor(0x00ff00);
-
-  blinkerSeconds.attach(0.02, handleTimerInterrupt);
 }
 
-void loop() {
-  Serial.println("Loop started!");
-  switch(activeMode){
-    case TIME: 
-                if((timeClient.getMinutes()+60 - lastTimeUpdate)%60 > 10){
-                  timeClient.forceUpdate();  
-                  lastTimeUpdate = timeClient.getMinutes();
-                }
-                break;
-    case WEATHER:
-                handleWeatherData();
-                break;
-    case BRAWLSTARS:
-                handleBrawlData();
-                break;
-    default:
-                break;
+void ledTask(void* parameter){
+
+  const TickType_t xFrequency = 10;
+  TickType_t xLastWakeTime;
+  xLastWakeTime = xTaskGetTickCount();
+
+  for(;;){
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
+    if(activeMode != OFFLINE){
+      handleOTA();
+      handleTelnet();
+
+      server.handleClient();
+    }
+    switch(activeBackground){
+      case RAINBOW: 
+                    {
+                    int rainbowBrightness = ((colorBG%256)+((colorBG/256)%256)+(colorBG%256%256))/3;
+                    rainbowbg(0.1, rainbowBrightness);
+                    break;
+                    }
+      case STATIC:
+                    staticbg(colorBG);
+                    break;
+      default:      
+                    staticbg(0x000000);
+                    break;
+    }
+    
+    switch(activeMode){
+      case OFFLINE:
+                  animateWifiError(1,8, 0xff0000);
+                  break;
+      case TIME: 
+                  writeTime(timeClient.getHours(), timeClient.getMinutes(), colorFG);
+                  FastLED.show();
+                  break;
+      case WEATHER:
+                  writeTemp(temperature, colorFG);
+                  FastLED.show();
+                  break;
+      default:
+                  FastLED.show();
+                  break;
+    }
   }
 
-  if(activeMode != OFFLINE){
-    handleOTA();
-    handleTelnet();
+}
 
-    server.handleClient();
+void dataTask(void* parameter) {
+
+  const TickType_t xFrequency = 1000;
+  TickType_t xLastWakeTime;
+  xLastWakeTime = xTaskGetTickCount();
+
+  for(;;){
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
+    switch(activeMode){
+      case TIME: 
+                  if((timeClient.getMinutes()+60 - lastTimeUpdate)%60 > 10){
+                    timeClient.forceUpdate();  
+                    lastTimeUpdate = timeClient.getMinutes();
+                  }
+                  break;
+      case WEATHER:
+                  handleWeatherData();
+                  break;
+      default:
+                  break;
+    }
+
+    if(activeMode != OFFLINE){
+      handleOTA();
+      handleTelnet();
+
+      server.handleClient();
+    }
   }
 
-  
-  delay(10);
-  Serial.println("Loop done!");
 }
 
 void myPrintln(const char* toPrint){
@@ -238,3 +248,5 @@ void myPrint(const char* toPrint){
   Serial.print(toPrint);
   #endif
 }
+
+void loop(){}

@@ -4,7 +4,6 @@
 #include "weather.h"
 #include "credentials.h"
 #include "OTA.h"
-#include "brawl.h"
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
@@ -35,9 +34,6 @@ void handleModeRequest(){
     if (server.hasHeader("Mode")){
         if(server.header("Mode").equals("time")){
             activeMode = TIME;
-        }
-        else if(server.header("Mode").equals("brawl")){
-            activeMode = BRAWLSTARS;
         }
         else if(server.header("Mode").equals("weather")){
             activeMode = WEATHER;
@@ -92,16 +88,6 @@ void serverSetup(){
     server.on("/weather", [](){
         server.send(200, "text/plain", String(temperature));
     });
-
-    server.on("/mytrophies", [](){
-        if(brawlInfoOnServer){
-        server.send(200, "text/plain", String(brawlInfoOnServer));
-        }else{
-        server.send(200, "text/plain", "error");
-        }
-    });
-
-    server.on("/changeBrawlInfo", changeBrawlInfo);
 
     server.on("/time", [](){
         server.send(200, "text/plain", String(timeClient.getFormattedTime()));
