@@ -184,13 +184,20 @@ void writeDigit(int number, int row, int column, long color){
 
 }
 
-void writeTime(int hours, int minutes, long color){
+void writeTime(int hours, int minutes, long colorFG, long colorBG){
     
     // animate blinking dots in the middle
-    if(millis()%2000 < 1000){
-        *display[4][10] = color;
-        *display[2][11] = color;
+    uint8_t dotsSaturation = (millis()%1000)/10;
+    if(millis()%2000>1000){
+        dotsSaturation = 100-dotsSaturation;
     }
+    uint8_t dotsRed = (colorFG>>16)*dotsSaturation/100 + (colorBG>>16)*(100-dotsSaturation)/100;
+    uint8_t dotsGreen = ((colorFG>>8)%(1<<8))*dotsSaturation/100 + ((colorBG>>8)%(1<<8))*(100-dotsSaturation)/100;
+    uint8_t dotsBlue = (colorFG%(1<<8))*dotsSaturation/100 + (colorBG%(1<<8))*(100-dotsSaturation)/100;
+    long dotsColor = (dotsRed<<16) + (dotsGreen<<8) + (dotsBlue);
+    *display[4][10] = dotsColor;
+    *display[2][11] = dotsColor;
+    
     
     // check if time has changed since last call
     // if(lastTimeShown == hours*60+minutes) {
@@ -201,13 +208,13 @@ void writeTime(int hours, int minutes, long color){
 
     //write hours
     if(hours>9){
-        writeDigit((int)(hours/10), 2, 4, color);
+        writeDigit((int)(hours/10), 2, 4, colorFG);
     }
-    writeDigit(hours%10, 2, 8, color);
+    writeDigit(hours%10, 2, 8, colorFG);
 
     //write minutes
-    writeDigit((int)(minutes/10), 2, 14, color);
-    writeDigit(minutes%10, 2, 18, color);
+    writeDigit((int)(minutes/10), 2, 14, colorFG);
+    writeDigit(minutes%10, 2, 18, colorFG);
 
 }
 

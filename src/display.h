@@ -13,7 +13,7 @@ void testLed();
 void setupLED();
 void writeDigit(int number, int row, int column, long color);
 void writeNumber(unsigned int number, long color);
-void writeTime(int hours, int minutes, long color);
+void writeTime(int hours, int minutes, long colorFG, long colorBG);
 void writeTemp(int temperature, long color);
 void animateWifiError(int row, int column, long color);
 void testAllLeds();
