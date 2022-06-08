@@ -1,3 +1,8 @@
+// Include Guard
+#ifndef WEBSERVER2_H
+#define WEBSERVER2_H
+
+
 #include <Arduino.h>
 #include <WebServer.h>
 #include <NTPClient.h>
@@ -19,7 +24,10 @@ extern long colorFG;
 extern int activeMode;
 extern int activeBackground;
 enum modes {OFFLINE, CLEAR, TIME, WEATHER, BRAWLSTARS, SLIDESHOW, SNAKE, PONG};
-enum backgrounds {RAINBOW, STATIC};
+enum backgrounds {RAINBOW, STATIC, CLOUD};
 
 bool wifiSetup();
 void serverSetup();
+
+
+#endif // WEBSERVER2_H

@@ -4,6 +4,8 @@
 #include "weather.h"
 #include "credentials.h"
 #include "OTA.h"
+#include "now.h"
+#include "esp_now.h"
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
@@ -12,14 +14,25 @@
 
 // returns true if no error occured, else false gets returned
 bool wifiSetup(){
-    WiFi.mode(WIFI_STA);
+    WiFi.mode(WIFI_AP_STA);
     WiFi.begin(SSID, PW);
 
-    while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    uint8_t result = WiFi.waitForConnectResult();
+
+    if(esp_now_init() != ESP_OK){
+        Telnet.println("ESP-NOW not initialized!");
+    }
+    
+    if (result != WL_CONNECTED) {
         Telnet.println("Connection Failed!");
         delay(5000);
         return false;
     }
+
+    
+
+    // Register callback function for receiving data
+    esp_now_register_recv_cb(nowReceiveCb);
 
     #if defined(DEBUGGING)
     Telnet.println("Ready");
@@ -49,13 +62,15 @@ void handleModeRequest(){
         else if(server.header("Background").equals("static")){
             activeBackground = STATIC;
         }
+        else if(server.header("Background").equals("cloud")){
+            activeBackground = CLOUD;
+        }
     }
 
     if (server.hasHeader("ColorBG")){
         char colorCharArray[7];
         colorCharArray[6] = '\0';
         server.header("ColorBG").toCharArray(colorCharArray, 7);
-        myPrintln(colorCharArray);
         colorBG = strtol(colorCharArray, NULL, 16);
         Telnet.print(colorBG);
     }
@@ -64,7 +79,6 @@ void handleModeRequest(){
         char colorCharArray[7];
         colorCharArray[6] = '\0';
         server.header("ColorFG").toCharArray(colorCharArray, 7);
-        myPrintln(colorCharArray);
         colorFG = strtol(colorCharArray, NULL, 16);
         Telnet.print(colorFG);
     }
@@ -91,6 +105,10 @@ void serverSetup(){
 
     server.on("/time", [](){
         server.send(200, "text/plain", String(timeClient.getFormattedTime()));
+    });
+
+    server.on("/mac", [](){
+        server.send(200, "text/plain", String(WiFi.macAddress()));
     });
 
     server.on("/mode", handleModeRequest);
