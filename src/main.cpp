@@ -37,18 +37,21 @@
   #include "display.h"
   #include "background.h"
   #include "credentials.h"
+  #include "now.h"
 #pragma endregion include
 
 #pragma region taskVariables
 TaskHandle_t ledHandle = NULL;
 TaskHandle_t dataHandle = NULL;
+TaskHandle_t wifiHandle = NULL;
 
 void ledTask(void* parameter);
 void dataTask(void* parameter);
+void wifiTask(void* parameter);
 #pragma endregion taskVariables
 
 #pragma region globalVariables
-
+void tryWifi();
 // defined in webserver2.h
 // enum modes {OFFLINE, CLEAR, TIME, WEATHER, BRAWLSTARS, SLIDESHOW, SNAKE, PONG};
 // enum backgrounds {RAINBOW, STATIC};
@@ -57,7 +60,6 @@ long colorFG;
 int activeMode = CLEAR;
 int activeBackground = RAINBOW;
 
-Ticker blinkerSeconds;
 
 const char* ssid = SSID;
 const char* password = PW;
@@ -108,17 +110,24 @@ uint16_t time_elapsed = 0;
 void setupTasks(){
   xTaskCreatePinnedToCore(ledTask, "led", 4096, NULL, 1, &ledHandle, 0);
   xTaskCreatePinnedToCore(dataTask, "data", 4096, NULL, 1, &dataHandle, 1);
+  xTaskCreatePinnedToCore(wifiTask, "wifi", 4096, NULL, 2, &wifiHandle, 1);
 }
 
 void setup() {
+  Serial.begin(115200);
   setupTasks();
 
+  setupLED();  
+
+  FastLED.showColor(0x00ff00);
+}
+
+void tryWifi(){
   if(wifiSetup()){
     serverSetup();
     setupOTA();
     setupTelnet();
 
-    Serial.begin(115200);
 
     activeMode = CLEAR;
     activeBackground = RAINBOW;
@@ -141,11 +150,6 @@ void setup() {
     //   timeClient.setTimeOffset(3600);
     // }
   }
-  
-
-  setupLED();  
-
-  FastLED.showColor(0x00ff00);
 }
 
 void ledTask(void* parameter){
@@ -157,13 +161,13 @@ void ledTask(void* parameter){
   for(;;){
     vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
-    if(activeMode != OFFLINE){
-      handleOTA();
-      handleTelnet();
-
-      server.handleClient();
-    }
     switch(activeBackground){
+      case CLOUD:
+                    {
+                    int brightness = ((colorBG%256)+((colorBG/256)%256)+(colorBG%256%256))/3;
+                    cloudbg(0.15, brightness, 80);
+                    break;
+                    }
       case RAINBOW: 
                     {
                     int rainbowBrightness = ((colorBG%256)+((colorBG/256)%256)+(colorBG%256%256))/3;
@@ -183,7 +187,7 @@ void ledTask(void* parameter){
                   animateWifiError(1,8, 0xff0000);
                   break;
       case TIME: 
-                  writeTime(timeClient.getHours(), timeClient.getMinutes(), colorFG);
+                  writeTime(timeClient.getHours(), timeClient.getMinutes(), colorFG, colorBG);
                   FastLED.show();
                   break;
       case WEATHER:
@@ -221,32 +225,32 @@ void dataTask(void* parameter) {
                   break;
     }
 
-    if(activeMode != OFFLINE){
-      handleOTA();
-      handleTelnet();
-
-      server.handleClient();
-    }
+    
   }
 
 }
 
-void myPrintln(const char* toPrint){
-  #if defined(DEBUGGING_ONLINE)
-  Telnet.println(toPrint);
-  #endif
-  #if defined(DEBUGGING_OFFLINE)
-  Serial.println(toPrint);
-  #endif
-}
+void wifiTask(void* parameter) {
 
-void myPrint(const char* toPrint){
-  #if defined(DEBUGGING_ONLINE)
-  Telnet.print(toPrint);
-  #endif
-  #if defined(DEBUGGING_OFFLINE)
-  Serial.print(toPrint);
-  #endif
+  const TickType_t xFrequency = 50;
+  TickType_t xLastWakeTime;
+  xLastWakeTime = xTaskGetTickCount();
+
+  tryWifi();
+
+  for(;;){
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
+    if(activeMode != OFFLINE && WiFi.status() == WL_CONNECTED){
+      handleOTA();
+      handleTelnet();
+
+      server.handleClient();
+    }else{
+      wifiSetup();
+    }
+  }
+
 }
 
 void loop(){}
