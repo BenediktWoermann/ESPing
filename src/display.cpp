@@ -292,7 +292,6 @@ void animateWifiError(int row, int column, long color){
         default:
                 break;
     }
-    FastLED.show();
 }
 
 void testAllLeds(){

@@ -14,33 +14,33 @@
 
 // returns true if no error occured, else false gets returned
 bool wifiSetup(){
-    WiFi.mode(WIFI_AP_STA);
-    WiFi.begin(SSID, PW);
+    // WiFi.mode(WIFI_AP_STA);
+    // WiFi.begin(SSID, PW);
 
-    uint8_t result = WiFi.waitForConnectResult();
+    // uint8_t result = WiFi.waitForConnectResult();
 
-    if(esp_now_init() != ESP_OK){
-        Telnet.println("ESP-NOW not initialized!");
-    }
+    // if(esp_now_init() != ESP_OK){
+    //     Telnet.println("ESP-NOW not initialized!");
+    // }
     
-    if (result != WL_CONNECTED) {
-        Telnet.println("Connection Failed!");
-        delay(5000);
-        return false;
-    }
+    // if (result != WL_CONNECTED) {
+    //     Telnet.println("Connection Failed!");
+    //     delay(5000);
+    //     return false;
+    // }
 
     
 
-    // Register callback function for receiving data
-    esp_now_register_recv_cb(nowReceiveCb);
+    // // Register callback function for receiving data
+    // esp_now_register_recv_cb(nowReceiveCb);
 
-    #if defined(DEBUGGING)
-    Telnet.println("Ready");
-    Telnet.print("IP address: ");
-    Serial.println(WiFi.localIP());
-    #endif
+    // #if defined(DEBUGGING)
+    // Telnet.println("Ready");
+    // Telnet.print("IP address: ");
+    // Serial.println(WiFi.localIP());
+    // #endif
 
-    return true;
+    // return true;
 }
 
 void handleModeRequest(){
