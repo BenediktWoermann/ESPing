@@ -39,13 +39,10 @@ void wifiTask(void* parameter);
 #pragma endregion taskVariables
 
 #pragma region globalVariables
-void tryWifi();
 void sysProvEvent(arduino_event_t *sys_event);
 void write_callback(Device *device, Param *param, const param_val_t val, void *priv_data, write_ctx_t *ctx);
 void setupRainMaker();
 void rainMakerReset();
-void setStaticColor(CRGB color);
-void setColor(CRGB color);
 
 enum modes {OFFLINE, CLEAR, TIME, WEATHER};
 enum backgrounds {RAINBOW, STATIC, CLOUD};
@@ -125,22 +122,16 @@ void setupRainMaker(){
   esping.addHueParam(360);
   esping.addSaturationParam(100);
 
-  Param mode = Param("Mode", NULL, esp_rmaker_str("RAINBOW"), PROP_FLAG_READ | PROP_FLAG_WRITE);
+  Param mode = Param("Mode", NULL, esp_rmaker_str("STATIC"), PROP_FLAG_READ | PROP_FLAG_WRITE);
   esp_rmaker_param_add_ui_type(mode.getParamHandle(), ESP_RMAKER_UI_DROPDOWN);
-  static const char *strs[] = {"RAINBOW", "STATIC", "CLOUD"};
+  static const char *strs[] = {"STATIC", "RAINBOW", "CLOUD"};
   esp_rmaker_param_add_valid_str_list(mode.getParamHandle(), strs, 3);
   esping.addParam(mode);
 
   // Enable Scenes
   esp_rmaker_scenes_enable();
-
-  //Standard switch device
   esping.addCb(write_callback);
-
-  //If you want to enable scheduling, set time zone for your region using setTimeZone().
-  //The list of available values are provided here https://rainmaker.espressif.com/docs/time-service.html
-  // RMaker.setTimeZone("Asia/Shanghai");
-  // Alternatively, enable the Timezone service and let the phone apps set the appropriate timezone
+  // Enable timezone service for scheduling
   RMaker.enableTZService();
   RMaker.enableSchedule();
 
@@ -148,21 +139,17 @@ void setupRainMaker(){
   RMaker.start();
 
   WiFi.onEvent(sysProvEvent);
-
   WiFiProv.beginProvision(WIFI_PROV_SCHEME_BLE, WIFI_PROV_SCHEME_HANDLER_FREE_BTDM, WIFI_PROV_SECURITY_1, pop, service_name);
 }
 
 void servicesSetup(){
   if(WiFi.status() == WL_CONNECTED){
-    serverSetup();
-
-
     timeClient.begin();
     timeClient.forceUpdate();  
     lastTimeUpdate = timeClient.getMinutes();
     timeClient.setTimeOffset(7200);
   }else{
-    Serial.println("Service setup failed, no wifi connection!");
+    Serial.println("Service setup failed, no Wifi connection!");
   }
 }
 
