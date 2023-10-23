@@ -1,6 +1,5 @@
 #include "util.h"
 
-#include "OTA.h"
 #include <Arduino.h>
 
 // if no category is required (for general stats) just put in "{" for category, because it is the first sign of the json returned by the api

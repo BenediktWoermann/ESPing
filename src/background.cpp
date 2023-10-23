@@ -2,9 +2,6 @@
 
 #include "display.h"
 #include <FastLED.h>
-#include "OTA.h"
-
-#define DEBUGGING 1
 
 void cloudbg(float speed, int scale){
     unsigned int offset = int(millis()*speed);

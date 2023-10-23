@@ -1,10 +1,6 @@
 #include "display.h"
 
-#include "OTA.h"
 #include <FastLED.h>
-
-// #define DEBUGGING 1
-
 
 void setupLED(){
     LEDS.addLeds<WS2811, dataPin, GRB>(leds,ledQuantity);
@@ -77,27 +73,17 @@ void setupLED(){
     display[3][amountOfCompleteColumns+3] = &leds[132];
     display[4][amountOfCompleteColumns+3] = &leds[133];
     display[5][amountOfCompleteColumns+3] = &leds[136];
-
-
-    // set full brightness
-	LEDS.setBrightness(255);
 }
 
 // input row and column specify the ball where the number will appear
 void writeDigit(int number, int row, int column, long color){
     // check if number is out of range
     if(number > 9 || number < 0){
-        #if defined(DEBUGGING)
-        Telnet.println("Number out of Range!");
-        #endif
         return;
     }
 
     // check if position is invalid (out of field)
     if(display[row-1][column-1] == NULL || display[row-1][column+2] == NULL || display[row+3][column-1] == NULL || display[row+3][column-2] == NULL){
-        #if defined(DEBUGGING)
-        Telnet.println("Invalid place for number!");
-        #endif
         return;
     }
 
@@ -302,8 +288,5 @@ void testAllLeds(){
     for(int i = 0; i<ledQuantity; i++){
         leds[i] = 0x000000;
         delay(40);
-    }   
-    #if defined(DEBUGGING)
-        Telnet.println("Tested!");
-    #endif
+    }
 }
