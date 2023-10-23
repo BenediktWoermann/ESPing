@@ -14,7 +14,6 @@
   #include <WiFi.h>
   #include "WiFiProv.h"
   #include <SimpleBLE.h>
-  #include <mDNS.h>
   #include <WiFiUdp.h>
   #include <WebServer.h>
   #include <ArduinoJson.h>
@@ -27,8 +26,6 @@
   #include "util.h"
   #include "display.h"
   #include "background.h"
-  #include "credentials.h"
-  #include "now.h"
 #pragma endregion include
 
 #pragma region taskVariables
