@@ -4,18 +4,18 @@
 #include <FastLED.h>
 
 void noisebg(float speed, float acceleration, float mutation, int scale, int minHue, int maxHue, int saturation, int intensity){
-    static unsigned int offsetX = 0
-    static unsigned int offsetX = 0
+    static unsigned int offsetX = 0;
+    static unsigned int offsetX = 0;
     unsigned long offsetMutation = int(millis() * mutation);
-    static unsigned long lastAcceleration = 0
-    float speedX = speed * inoise8(acceleration * millis())
+    static unsigned long lastAcceleration = 0;
+    float speedX = speed * inoise8(acceleration * millis());
     // Add some random offset for speedY to get different speeds for X and Y
     float speedY = speed * inoise8(acceleration * (millis() + 21479))
     if(lastAcceleration == 0){
         lastAcceleration = millis();
     }
-    offsetX += int((millis()-lastAcceleration) * speedX)
-    offsetY += int((millis()-lastAcceleration) * speedY)
+    offsetX += int((millis()-lastAcceleration) * speedX);
+    offsetY += int((millis()-lastAcceleration) * speedY);
 
     for(int col = 0; col<ledColumns; col++){
         for(int row = 0; row<ledRows; row++){
