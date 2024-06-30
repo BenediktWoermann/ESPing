@@ -3,6 +3,7 @@
 #define NOW_H
 
 #include <Arduino.h>
+#include <FastLED.h>
 #include "esp_now.h"
 #include "webserver2.h"
 
@@ -13,8 +14,9 @@ typedef struct nowMessage{
     int activeBackground;
 }nowMessage;
 
-extern long colorBG;
-extern long colorFG;
+extern uint8_t hue;
+extern uint8_t saturation;
+extern uint8_t intensity;
 extern int activeMode;
 extern int activeBackground;
 

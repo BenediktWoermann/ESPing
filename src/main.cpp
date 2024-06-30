@@ -83,6 +83,7 @@ uint8_t intensity = 255;
 uint8_t brightness = 255;
 
 bool wifi_connected = 0;
+bool serviceSetup = 0;
 
 //The framework provides some standard device types like switch, lightbulb, fan, temperature sensor.
 static LightBulb esping("Esping", &gpio_led);
@@ -145,6 +146,7 @@ void setupRainMaker(){
   esping.addIntensityParam(100);
   esping.addHueParam(360);
   esping.addSaturationParam(100);
+  esping.updateAndReportParam("Power", false);
 
   Param mode = Param("Mode", NULL, esp_rmaker_str("RAINBOW"), PROP_FLAG_READ | PROP_FLAG_WRITE);
   esp_rmaker_param_add_ui_type(mode.getParamHandle(), ESP_RMAKER_UI_DROPDOWN);
@@ -176,17 +178,16 @@ void setupRainMaker(){
 }
 
 void servicesSetup(){
-  if(WiFi.status() == WL_CONNECTED){
-    serverSetup();
-
-
-    timeClient.begin();
-    timeClient.forceUpdate();  
-    lastTimeUpdate = timeClient.getMinutes();
-    timeClient.setTimeOffset(7200);
-  }else{
-    Serial.println("Service setup failed, no wifi connection!");
+  serverSetup();
+  timeClient.begin();
+  timeClient.forceUpdate();  
+  lastTimeUpdate = timeClient.getMinutes();
+  timeClient.setTimeOffset(7200);
+  if(esp_now_init() != ESP_OK){
+    Telnet.println("ESP-NOW not initialized!");
   }
+  esp_now_register_recv_cb(nowReceiveCb);
+  serviceSetup = true;
 }
 
 void ledTask(void* parameter){
@@ -274,17 +275,17 @@ void wifiTask(void* parameter) {
   TickType_t xLastWakeTime;
   xLastWakeTime = xTaskGetTickCount();
 
-  servicesSetup();
-
   for(;;){
     vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
+    if(!serviceSetup && WiFi.status() == WL_CONNECTED){
+      servicesSetup();
+    }
 
     if(WiFi.status() == WL_CONNECTED){
       server.handleClient();
     }else{
       WiFiProv.beginProvision(WIFI_PROV_SCHEME_BLE, WIFI_PROV_SCHEME_HANDLER_FREE_BTDM, WIFI_PROV_SECURITY_1, pop, service_name);
-      // Register callback function for receiving data
-      esp_now_register_recv_cb(nowReceiveCb);
     }
   }
 
@@ -404,4 +405,14 @@ void write_callback(Device *device, Param *param, const param_val_t val, void *p
       param->updateAndReport(val);
     }
   }
+}
+
+void setPowerParamOff(){
+  esping.updateAndReportParam("Power", false);
+  powerState = false;
+}
+
+void setPowerParamOn(){
+  esping.updateAndReportParam("Power", true);
+  powerState = true;
 }
