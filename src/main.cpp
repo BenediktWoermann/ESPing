@@ -1,18 +1,10 @@
 /*------------------------------------------------------------------------------
-  YouTube video explaining OTA updates
-  https://youtu.be/gFK2EDNpIeM
-  https://youtu.be/R3aB85PuOQhY
-
   ESP RainMaker demo:
   https://www.youtube.com/techiesms
 
   Open Weather Map API:
   https://openweathermap.org/api
-
 ------------------------------------------------------------------------------*/
-
-#define DEBUGGING_ONLINE 1
-#define DEBUGGING_OFFLINE 1
 
 #pragma region include
   #include <Arduino.h>
@@ -22,9 +14,7 @@
   #include <WiFi.h>
   #include "WiFiProv.h"
   #include <SimpleBLE.h>
-  #include <mDNS.h>
   #include <WiFiUdp.h>
-  #include <ArduinoOTA.h>
   #include <WebServer.h>
   #include <ArduinoJson.h>
   #include <HTTPClient.h>
@@ -32,14 +22,10 @@
   #include <Ticker.h>
 
   #include "main.h"
-  #include "OTA.h"
   #include "weather.h"
   #include "util.h"
-  #include "webserver2.h"
   #include "display.h"
   #include "background.h"
-  #include "credentials.h"
-  #include "now.h"
 #pragma endregion include
 
 #pragma region taskVariables
@@ -53,21 +39,18 @@ void wifiTask(void* parameter);
 #pragma endregion taskVariables
 
 #pragma region globalVariables
-void tryWifi();
 void sysProvEvent(arduino_event_t *sys_event);
 void write_callback(Device *device, Param *param, const param_val_t val, void *priv_data, write_ctx_t *ctx);
 void setupRainMaker();
 void rainMakerReset();
-void setStaticColor(CRGB color);
-void setColor(CRGB color);
-// defined in webserver2.h
-// enum modes {OFFLINE, CLEAR, TIME, WEATHER, BRAWLSTARS, SLIDESHOW, SNAKE, PONG};
-// enum backgrounds {RAINBOW, STATIC, CLOUD};
+
+enum modes {OFFLINE, CLEAR, TIME, WEATHER};
+enum backgrounds {RAINBOW, STATIC, CLOUD};
 int activeMode = CLEAR;
-int activeBackground = RAINBOW;
+int activeBackground = STATIC;
 long colorFG = 0xffffff;
 // dummy variable to avoid write errors, all occurences must be changed to new rainmaker variables hue, saturation, intensity, brightness
-long colorBG = 0x999999;
+long colorBG = 0xFF8822;
 
 // BLE Credentils
 SimpleBLE ble;
@@ -108,13 +91,6 @@ int32_t lastWeatherQuery = -600;
 String weatherResult = "";
 float temperature = 0;
 
-WebServer server(80);
-WiFiClient weatherClient;
-
-WiFiServer telnetServer(23);
-WiFiClient Telnet;
-
-bool ota_flag = false;
 uint16_t time_elapsed = 0;
 
 #pragma endregion globalVariables
@@ -130,7 +106,7 @@ void setup() {
   Serial.begin(115200);
   setupRainMaker();
   setupLED();  
-  delay(2000);
+  delay(50);
   setupTasks();
 }
 
@@ -148,24 +124,16 @@ void setupRainMaker(){
   esping.addSaturationParam(100);
   esping.updateAndReportParam("Power", false);
 
-  Param mode = Param("Mode", NULL, esp_rmaker_str("RAINBOW"), PROP_FLAG_READ | PROP_FLAG_WRITE);
+  Param mode = Param("Mode", NULL, esp_rmaker_str("STATIC"), PROP_FLAG_READ | PROP_FLAG_WRITE);
   esp_rmaker_param_add_ui_type(mode.getParamHandle(), ESP_RMAKER_UI_DROPDOWN);
-  static const char *strs[] = {"RAINBOW", "STATIC", "CLOUD"};
+  static const char *strs[] = {"STATIC", "RAINBOW", "CLOUD"};
   esp_rmaker_param_add_valid_str_list(mode.getParamHandle(), strs, 3);
   esping.addParam(mode);
 
   // Enable Scenes
   esp_rmaker_scenes_enable();
-
-  //Standard switch device
   esping.addCb(write_callback);
-
-  //This is optional
-  RMaker.enableOTA(OTA_USING_PARAMS);
-  //If you want to enable scheduling, set time zone for your region using setTimeZone().
-  //The list of available values are provided here https://rainmaker.espressif.com/docs/time-service.html
-  // RMaker.setTimeZone("Asia/Shanghai");
-  // Alternatively, enable the Timezone service and let the phone apps set the appropriate timezone
+  // Enable timezone service for scheduling
   RMaker.enableTZService();
   RMaker.enableSchedule();
 
@@ -173,18 +141,17 @@ void setupRainMaker(){
   RMaker.start();
 
   WiFi.onEvent(sysProvEvent);
-
   WiFiProv.beginProvision(WIFI_PROV_SCHEME_BLE, WIFI_PROV_SCHEME_HANDLER_FREE_BTDM, WIFI_PROV_SECURITY_1, pop, service_name);
 }
 
 void servicesSetup(){
-  serverSetup();
-  timeClient.begin();
-  timeClient.forceUpdate();  
-  lastTimeUpdate = timeClient.getMinutes();
-  timeClient.setTimeOffset(7200);
-  if(esp_now_init() != ESP_OK){
-    Telnet.println("ESP-NOW not initialized!");
+  if(WiFi.status() == WL_CONNECTED){
+    timeClient.begin();
+    timeClient.forceUpdate();  
+    lastTimeUpdate = timeClient.getMinutes();
+    timeClient.setTimeOffset(7200);
+  }else{
+    Serial.println("Service setup failed, no Wifi connection!");300fa889752ab454891bc2363ede04a9f096
   }
   esp_now_register_recv_cb(nowReceiveCb);
   serviceSetup = true;
@@ -195,6 +162,11 @@ void ledTask(void* parameter){
   const TickType_t xFrequency = 10;
   TickType_t xLastWakeTime;
   xLastWakeTime = xTaskGetTickCount();
+  unsigned long offlineTimestamp = 0;
+  uint32_t offlineAnimationDuration = 5000;
+
+  // set full brightness
+	LEDS.setBrightness(255);
 
   for(;;){
     FastLED.show();
@@ -226,7 +198,13 @@ void ledTask(void* parameter){
     
     switch(activeMode){
       case OFFLINE:
-                  animateWifiError(1,8, 0xff0000);
+                  // Esping is offline. Show Wifi Error Animation for some duration, then switch display off
+                  if(offlineTimestamp != 0) offlineTimestamp = millis();
+                  if(millis()-offlineTimestamp < offlineAnimationDuration){
+                    animateWifiError(1,8, 0xff0000);
+                  }else{
+                    staticbg(0,0,0);
+                  }
                   break;
       case TIME: 
                   writeTime(timeClient.getHours(), timeClient.getMinutes(), colorFG, colorBG);
@@ -236,6 +214,9 @@ void ledTask(void* parameter){
                   break;
       default:
                   break;
+    }
+    if(activeMode != OFFLINE){
+      offlineTimestamp = 0;
     }
   }
 
@@ -271,20 +252,15 @@ void dataTask(void* parameter) {
 
 void wifiTask(void* parameter) {
 
-  const TickType_t xFrequency = 50;
+  const TickType_t xFrequency = 1000;
   TickType_t xLastWakeTime;
   xLastWakeTime = xTaskGetTickCount();
 
   for(;;){
     vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
-    if(!serviceSetup && WiFi.status() == WL_CONNECTED){
-      servicesSetup();
-    }
-
-    if(WiFi.status() == WL_CONNECTED){
-      server.handleClient();
-    }else{
+    // Try to reconnect when Wifi is lost
+    if(WiFi.status() != WL_CONNECTED){
       WiFiProv.beginProvision(WIFI_PROV_SCHEME_BLE, WIFI_PROV_SCHEME_HANDLER_FREE_BTDM, WIFI_PROV_SECURITY_1, pop, service_name);
     }
   }

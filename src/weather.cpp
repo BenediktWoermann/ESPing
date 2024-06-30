@@ -1,11 +1,7 @@
 #include "weather.h"
 
-#include "OTA.h"
 #include <Arduino.h>
 #include <ArduinoJson.h>
-
-#define DEBUGGING 1
-
 
 bool handleWeatherData(){
     // get new data every 10 minutes
@@ -26,9 +22,6 @@ void updateWeatherData(){
         weatherClient.println();
     } 
     else {
-        #if defined(DEBUGGING)
-        Telnet.println("connection failed"); //error message if no client connect
-        #endif
         return;
     }
 
@@ -51,15 +44,9 @@ void updateWeatherData(){
     JsonObject &root = json_buf.parseObject(jsonArray);
     if (!root.success())
     {
-        #if defined(DEBUGGING)
-        Telnet.println("parseObject() failed");
-        #endif
         return;
     }
     
     
     float read_temperature = root["main"]["temp"];
-    temperature = read_temperature;
-    Telnet.println("temperature:   ");
-    Telnet.println(temperature);
 }
