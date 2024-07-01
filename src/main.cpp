@@ -34,7 +34,6 @@ TaskHandle_t dataHandle = NULL;
 TaskHandle_t wifiHandle = NULL;
 
 void ledTask(void* parameter);
-void dataTask(void* parameter);
 void wifiTask(void* parameter);
 #pragma endregion taskVariables
 
@@ -79,18 +78,6 @@ CRGB leds[ledQuantity];
 CRGB* display[ledRows][ledColumns];
 int lastTimeShown = -1;
 
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org");
-// last time update at minute:
-int lastTimeUpdate = 0;
-
-char const * weatherServername = "api.openweathermap.org";
-const String cityID = CITYID;
-const String  apiKey = WEATHERAPIKEY;
-int32_t lastWeatherQuery = -600;
-String weatherResult = "";
-float temperature = 0;
-
 uint16_t time_elapsed = 0;
 
 #pragma endregion globalVariables
@@ -98,7 +85,6 @@ uint16_t time_elapsed = 0;
 
 void setupTasks(){
   xTaskCreatePinnedToCore(ledTask, "led", 4096, NULL, 3, &ledHandle, 1);
-  xTaskCreatePinnedToCore(dataTask, "data", 4096, NULL, 1, &dataHandle, 0);
   xTaskCreatePinnedToCore(wifiTask, "wifi", 4096, NULL, 2, &wifiHandle, 0);
 }
 
@@ -142,19 +128,6 @@ void setupRainMaker(){
 
   WiFi.onEvent(sysProvEvent);
   WiFiProv.beginProvision(WIFI_PROV_SCHEME_BLE, WIFI_PROV_SCHEME_HANDLER_FREE_BTDM, WIFI_PROV_SECURITY_1, pop, service_name);
-}
-
-void servicesSetup(){
-  if(WiFi.status() == WL_CONNECTED){
-    timeClient.begin();
-    timeClient.forceUpdate();  
-    lastTimeUpdate = timeClient.getMinutes();
-    timeClient.setTimeOffset(7200);
-  }else{
-    Serial.println("Service setup failed, no Wifi connection!");300fa889752ab454891bc2363ede04a9f096
-  }
-  esp_now_register_recv_cb(nowReceiveCb);
-  serviceSetup = true;
 }
 
 void ledTask(void* parameter){
@@ -206,46 +179,12 @@ void ledTask(void* parameter){
                     staticbg(0,0,0);
                   }
                   break;
-      case TIME: 
-                  writeTime(timeClient.getHours(), timeClient.getMinutes(), colorFG, colorBG);
-                  break;
-      case WEATHER:
-                  writeTemp(temperature, colorFG);
-                  break;
       default:
                   break;
     }
     if(activeMode != OFFLINE){
       offlineTimestamp = 0;
     }
-  }
-
-}
-
-void dataTask(void* parameter) {
-
-  const TickType_t xFrequency = 1000;
-  TickType_t xLastWakeTime;
-  xLastWakeTime = xTaskGetTickCount();
-
-  for(;;){
-    vTaskDelayUntil(&xLastWakeTime, xFrequency);
-
-    switch(activeMode){
-      case TIME: 
-                  if((timeClient.getMinutes()+60 - lastTimeUpdate)%60 > 10){
-                    timeClient.forceUpdate();  
-                    lastTimeUpdate = timeClient.getMinutes();
-                  }
-                  break;
-      case WEATHER:
-                  handleWeatherData();
-                  break;
-      default:
-                  break;
-    }
-
-    
   }
 
 }
