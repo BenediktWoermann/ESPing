@@ -1,0 +1,1 @@
+[![PlatformIO CI](https://github.com/BenediktWoermann/ESPing/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/BenediktWoermann/ESPing/actions/workflows/main.yml)
