@@ -28,28 +28,3 @@ char* partOfString(char* string, int startIndex, int endIndex){
   part[endIndex-startIndex] = '\0';
   return part; 
 }
-
-// //outputs a number between 0 and 6: 0->Monday, 1->Tuesday, ..., 6->Sunday
-// int getWeekday(int day, int month, int year){
-//   enum {January, February, March, April, May, June, July, August, September, Oktober, November, December};
-//   int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-//   // 01.01.2000 was a saturday
-//   int weekday = 5;
-//   weekday += day-1;
-//   for (int i =  1; i<month; i++){
-//     weekday += daysInMonth[i];
-//   }
-//   if(isLeapYear(year) && month > 2) weekday++;
-//   for(int i = 2000; i<year; i++){
-//     weekday += isLeapYear(i)?366:365;
-//   }
-//   return weekday%7;
-// }
-
-// // calculates if the given year is a leap year or not
-// bool isLeapYear(int year){
-//   if(year%4 != 0) return false;
-//   if(year%100 != 0) return true;
-//   if(year%400 != 0) return false;
-//   return true;
-// }

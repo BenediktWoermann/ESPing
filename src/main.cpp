@@ -16,13 +16,10 @@
   #include <SimpleBLE.h>
   #include <WiFiUdp.h>
   #include <WebServer.h>
-  #include <ArduinoJson.h>
   #include <HTTPClient.h>
-  #include <NTPClient.h>
   #include <Ticker.h>
 
   #include "main.h"
-  #include "weather.h"
   #include "util.h"
   #include "display.h"
   #include "background.h"
