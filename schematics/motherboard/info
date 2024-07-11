@@ -1,0 +1,341 @@
+{
+  "uuid": "1768015af32574832e2bef436fd42c8f",
+  "path": "Offline/Esping_v2",
+  "name": "Esping_v2",
+  "content": "",
+  "created_at": "2023-12-08 21:12:23",
+  "updated_at": "2024-03-17 17:36:56",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "fd4c8ec2a55aa045b3c5a76525918a94",
+      "title": "Sheet_1",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "d30b02e889a2458f9535b9129d69edac": 1,
+        "24eeb2ceca08480b92b847b6a310acda": 3,
+        "a39f40cff7f64fcd86eb61f5dfc0bd4f": 2,
+        "0c0b24f64f4b495d8e4e83d7a027d4de": 1,
+        "b0248eb51e084227889f2cb84eab79c4": 4,
+        "0be0e6a9bf56432381e13df21a729729": 1,
+        "18479f1c4d4749c5a4c4387846c5d657": 2,
+        "f5b1d9403e49471cab43bc5a1bec336f": 1,
+        "83e6bab803564d5386bb501d71b5b541": 2,
+        "a68dc5e6a9944c46b7604648a43dcd65": 3,
+        "d851786b5c664ff789b13c0741460439": 2,
+        "d0e92ddc21a04570b2f506170342ebbf": 1,
+        "daa3cf3493c84fa3b0b6a6d427d23f0b": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "10u",
+          3,
+          "C0603",
+          "C1,C2,C4",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "f8151fdc728a41ebbc304e11d39e5437",
+            "uuid": "24eeb2ceca08480b92b847b6a310acda"
+          }
+        ],
+        [
+          "0.1u",
+          2,
+          "C1206",
+          "C3,C5",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "7bdec8012728462a85919a4d0d033579",
+            "uuid": "a39f40cff7f64fcd86eb61f5dfc0bd4f"
+          }
+        ],
+        [
+          "DC005-2.0MM",
+          1,
+          "DC-IN-TH_DC005",
+          "DC1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "SOFNG",
+            "BOM_Manufacturer Part": "DC005-2.0MM",
+            "BOM_Supplier Part": "C111567",
+            "puuid": "1337670005c6484c999f9b4c272ee9fe",
+            "uuid": "daa3cf3493c84fa3b0b6a6d427d23f0b"
+          }
+        ],
+        [
+          "Serial",
+          1,
+          "HDR-M-2.54_1X4",
+          "J1",
+          {
+            "BOM_Supplier Part": "C124378",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "282f7786cb6144d097ae00194c3e3fb3",
+            "uuid": "f5b1d9403e49471cab43bc5a1bec336f"
+          }
+        ],
+        [
+          "LED1",
+          1,
+          "HDR-M-2.54_1X3",
+          "J2",
+          {
+            "BOM_Supplier Part": "C180248",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "9f77654394344f25b3de138e0fe05ff6",
+            "uuid": "a68dc5e6a9944c46b7604648a43dcd65"
+          }
+        ],
+        [
+          "LED2",
+          1,
+          "HDR-M-2.54_1X3",
+          "J3",
+          {
+            "BOM_Supplier Part": "C180248",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "9f77654394344f25b3de138e0fe05ff6",
+            "uuid": "a68dc5e6a9944c46b7604648a43dcd65"
+          }
+        ],
+        [
+          "LED3",
+          1,
+          "HDR-M-2.54_1X3",
+          "J4",
+          {
+            "BOM_Supplier Part": "C180248",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "9f77654394344f25b3de138e0fe05ff6",
+            "uuid": "a68dc5e6a9944c46b7604648a43dcd65"
+          }
+        ],
+        [
+          "HDR-M-2.54_1x20",
+          2,
+          "HDR-M-2.54_1X20",
+          "J5,J6",
+          {
+            "BOM_Supplier Part": "C50981",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "fa8b3531a8854d41bcf2c462cb2bfc07",
+            "uuid": "d851786b5c664ff789b13c0741460439"
+          }
+        ],
+        [
+          "RESET",
+          1,
+          "KEY-TH_4P-L6.0-W6.0-P4.50-LS6.5",
+          "KEY1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C136684",
+            "BOM_Manufacturer": "韩国韩荣",
+            "BOM_Manufacturer Part": "K2-1102DP-E4SW-04",
+            "puuid": "557c105168d444a992e25584f55bcbb2",
+            "uuid": "18479f1c4d4749c5a4c4387846c5d657"
+          }
+        ],
+        [
+          "BOOT",
+          1,
+          "KEY-TH_4P-L6.0-W6.0-P4.50-LS6.5",
+          "KEY2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C136684",
+            "BOM_Manufacturer": "韩国韩荣",
+            "BOM_Manufacturer Part": "K2-1102DP-E4SW-04",
+            "puuid": "557c105168d444a992e25584f55bcbb2",
+            "uuid": "18479f1c4d4749c5a4c4387846c5d657"
+          }
+        ],
+        [
+          "3.3uH",
+          1,
+          "IND-SMD_L4.0-W4.0",
+          "L1",
+          {
+            "BOM_Manufacturer Part": "",
+            "puuid": "a4d354a2f7b24c56ac4f3ee62e31a868",
+            "uuid": "0c0b24f64f4b495d8e4e83d7a027d4de"
+          }
+        ],
+        [
+          "22.1k",
+          1,
+          "R0603",
+          "R1",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "b0248eb51e084227889f2cb84eab79c4"
+          }
+        ],
+        [
+          "51k",
+          1,
+          "R0603",
+          "R2",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "b0248eb51e084227889f2cb84eab79c4"
+          }
+        ],
+        [
+          "10k",
+          2,
+          "R0603",
+          "R3,R4",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "b0248eb51e084227889f2cb84eab79c4"
+          }
+        ],
+        [
+          "LMR50410YQDBVRQ1",
+          1,
+          "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR",
+          "U1",
+          {
+            "BOM_Manufacturer Part": "",
+            "puuid": "f3d2a2ecf658447dac746eb15158a989",
+            "uuid": "d30b02e889a2458f9535b9129d69edac"
+          }
+        ],
+        [
+          "ESP32-WROOM-32",
+          1,
+          "WIFIM-SMD_ESP32-WROOM-32-N4",
+          "U2",
+          {
+            "BOM_Manufacturer Part": "",
+            "puuid": "5ca5015729764ac0b14d2bf8d2d3c85d",
+            "uuid": "0be0e6a9bf56432381e13df21a729729"
+          }
+        ],
+        [
+          "Terminal2",
+          1,
+          "CONN-TH_2P-P5.0-TB002-500-02BE",
+          "U4",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "TB002-500-02BE",
+            "BOM_Manufacturer": "null",
+            "BOM_Manufacturer Part": "TB002-500-02BE",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "2c940af5ffdd49f4bf699378f3aceff6",
+            "uuid": "83e6bab803564d5386bb501d71b5b541"
+          }
+        ],
+        [
+          "Terminal3",
+          1,
+          "CONN-TH_2P-P5.0-TB002-500-02BE",
+          "U5",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "TB002-500-02BE",
+            "BOM_Manufacturer": "null",
+            "BOM_Manufacturer Part": "TB002-500-02BE",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "2c940af5ffdd49f4bf699378f3aceff6",
+            "uuid": "83e6bab803564d5386bb501d71b5b541"
+          }
+        ],
+        [
+          "4PIN LED STRIP RIGHT ANGLE CORNER",
+          1,
+          "4PIN-10MM-LED-STRIP",
+          "U6",
+          {
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "puuid": "b7b02cdafc4f430fb4e60798fffb90ab",
+            "uuid": "d0e92ddc21a04570b2f506170342ebbf"
+          }
+        ]
+      ],
+      "updateTime": 1702238680,
+      "createTime": 1702066343,
+      "histories": [],
+      "created_at": "2023-12-08 21:12:23",
+      "updated_at": "2023-12-10 21:04:40"
+    },
+    {
+      "uuid": "188ed6ad51e53ed300500789abc64684",
+      "puuid": "1768015af32574832e2bef436fd42c8f",
+      "title": "PCB_Esping_v2",
+      "filename": "PCB_Esping_v2.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "f8151fdc728a41ebbc304e11d39e5437": 3,
+        "7bdec8012728462a85919a4d0d033579": 2,
+        "b7b02cdafc4f430fb4e60798fffb90ab": 1,
+        "1337670005c6484c999f9b4c272ee9fe": 1,
+        "282f7786cb6144d097ae00194c3e3fb3": 1,
+        "9f77654394344f25b3de138e0fe05ff6": 3,
+        "fa8b3531a8854d41bcf2c462cb2bfc07": 2,
+        "557c105168d444a992e25584f55bcbb2": 2,
+        "a4d354a2f7b24c56ac4f3ee62e31a868": 1,
+        "398691f1f785460098bbe5ee6590333c": 4,
+        "f3d2a2ecf658447dac746eb15158a989": 1,
+        "5ca5015729764ac0b14d2bf8d2d3c85d": 1,
+        "2c940af5ffdd49f4bf699378f3aceff6": 2
+      },
+      "BOM": [],
+      "updateTime": 1710693416,
+      "createTime": 1702237970,
+      "histories": [],
+      "created_at": "2023-12-10 20:52:50",
+      "updated_at": "2024-03-17 17:36:56"
+    }
+  ],
+  "sort": [
+    "fd4c8ec2a55aa045b3c5a76525918a94",
+    "6fd70074e35512bf4c76d3e1e90bc858"
+  ],
+  "title": "Esping_v2",
+  "foldername": "Esping_v2",
+  "schfilename": "Esping_v2.json",
+  "schfilemtime": 1705171106238
+}
