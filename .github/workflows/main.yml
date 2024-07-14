@@ -3,22 +3,35 @@ name: PlatformIO CI
 on: [push]
 
 jobs:
-  build:
+  check-runner:
     runs-on: ubuntu-latest
+    outputs:
+      runner-label: ${{ steps.set-runner.outputs.runner-label }}
+
+    steps:
+      - name: Set runner
+        id: set-runner
+        run: |
+          runners=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.REPO_ACCESS_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners")
+          available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .busy == false and .labels[] .name == "self-hosted")')
+          if [ -n "$available" ]; then
+            echo "runner-label=self-hosted" >> $GITHUB_OUTPUT
+          else
+            echo "runner-label=ubuntu-latest" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    needs: check-runner
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pip
-            ~/.platformio/.cache
-          key: ${{ runner.os }}-pio
-      - uses: actions/setup-python@v4
+      - if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install PlatformIO Core
+      - if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
+        name: Install PlatformIO Core
         run: pip install --upgrade platformio
-
       - name: Build PlatformIO Project
         run: pio run
