@@ -20,21 +20,34 @@ jobs:
             echo "runner-label=ubuntu-latest" >> $GITHUB_OUTPUT
           fi
 
-  build:
+  prepare:
     needs: check-runner
     runs-on: ${{ needs.check-runner.outputs.runner-label }}
-
+    if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
     steps:
-      - uses: actions/checkout@v3
-      - if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
-        name: Install PlatformIO Core
+      - name: Install PlatformIO Core
         run: pip install --upgrade platformio
+
+  checkout:
+    needs: check-runner
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    steps:
+      - uses: actions/checkout@v3
+
+  build:
+    needs: [check-runner, checkout]
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    steps:
       - name: Build PlatformIO Project
         run: pio run
-      - if: ${{ needs.check-runner.outputs.runner-label }} == "self-hosted"
-        name: Upload PlatformIO Project
+        
+  flash-test:
+    needs: [check-runner, build]
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    if: ${{ needs.check-runner.outputs.runner-label }} == "self-hosted"
+    steps:
+      - name: Upload PlatformIO Project
         run: pio run -t nobuild -t upload
