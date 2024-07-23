@@ -20,8 +20,14 @@ jobs:
             echo "runner-label=ubuntu-latest" >> $GITHUB_OUTPUT
           fi
 
-  prepare:
+  checkout:
     needs: set-runner
+    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    steps:
+      - uses: actions/checkout@v3
+
+  prepare:
+    needs: [set-runner, checkout]
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
     if: ${{ needs.set-runner.outputs.runner-label }} != "self-hosted"
     steps:
@@ -31,14 +37,8 @@ jobs:
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
 
-  checkout:
-    needs: [set-runner, prepare]
-    runs-on: ${{ needs.set-runner.outputs.runner-label }}
-    steps:
-      - uses: actions/checkout@v3
-
   build:
-    needs: [set-runner, checkout]
+    needs: [set-runner, prepare]
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
     steps:
       - name: Build PlatformIO Project
