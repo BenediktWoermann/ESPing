@@ -3,7 +3,7 @@ name: PlatformIO CI
 on: [push]
 
 jobs:
-  check-runner:
+  set-runner:
     runs-on: ubuntu-latest
     outputs:
       runner-label: ${{ steps.set-runner.outputs.runner-label }}
@@ -21,9 +21,9 @@ jobs:
           fi
 
   prepare:
-    needs: check-runner
-    runs-on: ${{ needs.check-runner.outputs.runner-label }}
-    if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
+    needs: set-runner
+    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    if: ${{ needs.set-runner.outputs.runner-label }} != "self-hosted"
     steps:
       - uses: actions/setup-python@v4
         with:
@@ -32,22 +32,22 @@ jobs:
         run: pip install --upgrade platformio
 
   checkout:
-    needs: check-runner
-    runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    needs: [set-runner, prepare]
+    runs-on: ${{ needs.set-runner.outputs.runner-label }}
     steps:
       - uses: actions/checkout@v3
 
   build:
-    needs: [check-runner, checkout]
-    runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    needs: [set-runner, checkout]
+    runs-on: ${{ needs.set-runner.outputs.runner-label }}
     steps:
       - name: Build PlatformIO Project
         run: pio run
         
   flash-test:
-    needs: [check-runner, build]
-    runs-on: ${{ needs.check-runner.outputs.runner-label }}
-    if: ${{ needs.check-runner.outputs.runner-label }} == "self-hosted"
+    needs: [set-runner, build]
+    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    if: ${{ needs.set-runner.outputs.runner-label }} == "self-hosted"
     steps:
       - name: Upload PlatformIO Project
         run: pio run -t nobuild -t upload
