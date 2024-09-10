@@ -1,0 +1,472 @@
+{
+  "uuid": "71c316bf023f2824ddf194084d807c65",
+  "path": "Offline/Esping",
+  "name": "Esping",
+  "content": "",
+  "created_at": "2024-09-10 21:20:03",
+  "updated_at": "2024-09-10 21:26:23",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "035c96326757d8268ba2d55948ffa20a",
+      "title": "Esping_Connector",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "d0e92ddc21a04570b2f506170342ebbf": 2,
+        "02d4a42776b24d7e9fb3928674b5a2e8": 4
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "4PIN",
+          2,
+          "4PIN-10MM-LED-STRIP",
+          "U1,U2",
+          {
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Supplier Part": "",
+            "Supplier": "",
+            "link": "",
+            "Contributor": "mattiabasket2004",
+            "spiceSymbolName": "4PIN LED STRIP RIGHT ANGLE CORNER",
+            "puuid": "b7b02cdafc4f430fb4e60798fffb90ab",
+            "uuid": "d0e92ddc21a04570b2f506170342ebbf"
+          }
+        ],
+        [
+          "solderpad4x2mm",
+          4,
+          "SOLDERPAD 4X2MM",
+          "U3,U4,U5,U6",
+          {
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Supplier Part": "",
+            "Supplier": "",
+            "link": "",
+            "Contributor": "Benjamin Fuchs",
+            "spiceSymbolName": "solderpad4x2mm",
+            "puuid": "3aa00974f24b49348db58e1899f55613",
+            "uuid": "02d4a42776b24d7e9fb3928674b5a2e8"
+          }
+        ]
+      ],
+      "updateTime": 1725996186,
+      "createTime": 1725996186,
+      "histories": [],
+      "created_at": "2024-09-10 21:23:06",
+      "updated_at": "2024-09-10 21:23:06"
+    },
+    {
+      "uuid": "e8d5bb28a70a2b01403fa2e1acd8fbfb",
+      "title": "Esping_Mainboard",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "d30b02e889a2458f9535b9129d69edac": 1,
+        "24eeb2ceca08480b92b847b6a310acda": 3,
+        "a39f40cff7f64fcd86eb61f5dfc0bd4f": 2,
+        "0c0b24f64f4b495d8e4e83d7a027d4de": 1,
+        "b0248eb51e084227889f2cb84eab79c4": 4,
+        "0be0e6a9bf56432381e13df21a729729": 1,
+        "18479f1c4d4749c5a4c4387846c5d657": 2,
+        "f5b1d9403e49471cab43bc5a1bec336f": 1,
+        "83e6bab803564d5386bb501d71b5b541": 2,
+        "a68dc5e6a9944c46b7604648a43dcd65": 3,
+        "d851786b5c664ff789b13c0741460439": 2,
+        "d0e92ddc21a04570b2f506170342ebbf": 1,
+        "daa3cf3493c84fa3b0b6a6d427d23f0b": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "10u",
+          3,
+          "C0603",
+          "C1,C2,C4",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "C_0603_US",
+            "Manufacturer Part": "",
+            "puuid": "f8151fdc728a41ebbc304e11d39e5437",
+            "uuid": "24eeb2ceca08480b92b847b6a310acda"
+          }
+        ],
+        [
+          "0.1u",
+          2,
+          "C1206",
+          "C3,C5",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "C_1206_US",
+            "Manufacturer Part": "",
+            "puuid": "7bdec8012728462a85919a4d0d033579",
+            "uuid": "a39f40cff7f64fcd86eb61f5dfc0bd4f"
+          }
+        ],
+        [
+          "DC005-2.0MM",
+          1,
+          "DC-IN-TH_DC005",
+          "DC1",
+          {
+            "Supplier": "LCSC",
+            "Manufacturer": "SOFNG",
+            "Manufacturer Part": "DC005-2.0MM",
+            "Supplier Part": "C111567",
+            "spiceSymbolName": "DC005-2.0MM",
+            "puuid": "1337670005c6484c999f9b4c272ee9fe",
+            "uuid": "daa3cf3493c84fa3b0b6a6d427d23f0b"
+          }
+        ],
+        [
+          "Serial",
+          1,
+          "HDR-M-2.54_1X4",
+          "J1",
+          {
+            "Supplier Part": "C124378",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-M-2.54_1x4",
+            "puuid": "282f7786cb6144d097ae00194c3e3fb3",
+            "uuid": "f5b1d9403e49471cab43bc5a1bec336f"
+          }
+        ],
+        [
+          "LED1",
+          1,
+          "HDR-M-2.54_1X3",
+          "J2",
+          {
+            "Supplier Part": "C180248",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "image": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-M-2.54_1x3",
+            "puuid": "9f77654394344f25b3de138e0fe05ff6",
+            "uuid": "a68dc5e6a9944c46b7604648a43dcd65"
+          }
+        ],
+        [
+          "LED2",
+          1,
+          "HDR-M-2.54_1X3",
+          "J3",
+          {
+            "Supplier Part": "C180248",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "image": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-M-2.54_1x3",
+            "puuid": "9f77654394344f25b3de138e0fe05ff6",
+            "uuid": "a68dc5e6a9944c46b7604648a43dcd65"
+          }
+        ],
+        [
+          "LED3",
+          1,
+          "HDR-M-2.54_1X3",
+          "J4",
+          {
+            "Supplier Part": "C180248",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "image": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-M-2.54_1x3",
+            "puuid": "9f77654394344f25b3de138e0fe05ff6",
+            "uuid": "a68dc5e6a9944c46b7604648a43dcd65"
+          }
+        ],
+        [
+          "HDR-M-2.54_1x20",
+          2,
+          "HDR-M-2.54_1X20",
+          "J5,J6",
+          {
+            "Supplier Part": "C50981",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "image": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-M-2.54_1x20",
+            "puuid": "fa8b3531a8854d41bcf2c462cb2bfc07",
+            "uuid": "d851786b5c664ff789b13c0741460439"
+          }
+        ],
+        [
+          "RESET",
+          1,
+          "KEY-TH_4P-L6.0-W6.0-P4.50-LS6.5",
+          "KEY1",
+          {
+            "Supplier": "LCSC",
+            "Supplier Part": "C136684",
+            "Manufacturer": "韩国韩荣",
+            "Manufacturer Part": "K2-1102DP-E4SW-04",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "K4-6×6_TH",
+            "puuid": "557c105168d444a992e25584f55bcbb2",
+            "uuid": "18479f1c4d4749c5a4c4387846c5d657"
+          }
+        ],
+        [
+          "BOOT",
+          1,
+          "KEY-TH_4P-L6.0-W6.0-P4.50-LS6.5",
+          "KEY2",
+          {
+            "Supplier": "LCSC",
+            "Supplier Part": "C136684",
+            "Manufacturer": "韩国韩荣",
+            "Manufacturer Part": "K2-1102DP-E4SW-04",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "K4-6×6_TH",
+            "puuid": "557c105168d444a992e25584f55bcbb2",
+            "uuid": "18479f1c4d4749c5a4c4387846c5d657"
+          }
+        ],
+        [
+          "3.3uH",
+          1,
+          "IND-SMD_L4.0-W4.0",
+          "L1",
+          {
+            "Contributor": "LCSC",
+            "Supplier": "LCSC",
+            "Supplier Part": "C340390",
+            "Manufacturer": "YJYCOIN(益嘉源)",
+            "Manufacturer Part": "",
+            "JLCPCB Part Class": "Extended Part",
+            "spiceSymbolName": "YNR4030-3R3M",
+            "puuid": "a4d354a2f7b24c56ac4f3ee62e31a868",
+            "uuid": "0c0b24f64f4b495d8e4e83d7a027d4de"
+          }
+        ],
+        [
+          "22.1k",
+          1,
+          "R0603",
+          "R1",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "R_0603_US",
+            "Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "b0248eb51e084227889f2cb84eab79c4"
+          }
+        ],
+        [
+          "51k",
+          1,
+          "R0603",
+          "R2",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "R_0603_US",
+            "Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "b0248eb51e084227889f2cb84eab79c4"
+          }
+        ],
+        [
+          "10k",
+          2,
+          "R0603",
+          "R3,R4",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "R_0603_US",
+            "Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "b0248eb51e084227889f2cb84eab79c4"
+          }
+        ],
+        [
+          "LMR50410YQDBVRQ1",
+          1,
+          "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR",
+          "U1",
+          {
+            "Contributor": "lcsc",
+            "Supplier": "LCSC",
+            "Supplier Part": "C2877621",
+            "Manufacturer": "TI(德州仪器)",
+            "Manufacturer Part": "",
+            "JLCPCB Part Class": "Extended Part",
+            "spiceSymbolName": "LMR50410YQDBVRQ1",
+            "puuid": "f3d2a2ecf658447dac746eb15158a989",
+            "uuid": "d30b02e889a2458f9535b9129d69edac"
+          }
+        ],
+        [
+          "ESP32-WROOM-32",
+          1,
+          "WIFIM-SMD_ESP32-WROOM-32-N4",
+          "U2",
+          {
+            "Contributor": "LCSC",
+            "Supplier": "LCSC",
+            "Supplier Part": "C82899",
+            "Manufacturer": "ESPRESSIF(乐鑫)",
+            "Manufacturer Part": "",
+            "JLCPCB Part Class": "Extended Part",
+            "spiceSymbolName": "ESP32-WROOM-32",
+            "puuid": "5ca5015729764ac0b14d2bf8d2d3c85d",
+            "uuid": "0be0e6a9bf56432381e13df21a729729"
+          }
+        ],
+        [
+          "Terminal2",
+          1,
+          "CONN-TH_2P-P5.0-TB002-500-02BE",
+          "U4",
+          {
+            "Supplier": "LCSC",
+            "Supplier Part": "TB002-500-02BE",
+            "Manufacturer": "null",
+            "Manufacturer Part": "TB002-500-02BE",
+            "Contributor": "RobinsonNi",
+            "JLCPCB Part Class": "Extended Part",
+            "spiceSymbolName": "TB002-500-02BE",
+            "puuid": "2c940af5ffdd49f4bf699378f3aceff6",
+            "uuid": "83e6bab803564d5386bb501d71b5b541"
+          }
+        ],
+        [
+          "Terminal3",
+          1,
+          "CONN-TH_2P-P5.0-TB002-500-02BE",
+          "U5",
+          {
+            "Supplier": "LCSC",
+            "Supplier Part": "TB002-500-02BE",
+            "Manufacturer": "null",
+            "Manufacturer Part": "TB002-500-02BE",
+            "Contributor": "RobinsonNi",
+            "JLCPCB Part Class": "Extended Part",
+            "spiceSymbolName": "TB002-500-02BE",
+            "puuid": "2c940af5ffdd49f4bf699378f3aceff6",
+            "uuid": "83e6bab803564d5386bb501d71b5b541"
+          }
+        ],
+        [
+          "4PIN LED STRIP RIGHT ANGLE CORNER",
+          1,
+          "4PIN-10MM-LED-STRIP",
+          "U6",
+          {
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Supplier Part": "",
+            "Supplier": "",
+            "link": "",
+            "Contributor": "mattiabasket2004",
+            "spiceSymbolName": "4PIN LED STRIP RIGHT ANGLE CORNER",
+            "puuid": "b7b02cdafc4f430fb4e60798fffb90ab",
+            "uuid": "d0e92ddc21a04570b2f506170342ebbf"
+          }
+        ]
+      ],
+      "updateTime": 1725996219,
+      "createTime": 1725996219,
+      "histories": [],
+      "created_at": "2024-09-10 21:23:39",
+      "updated_at": "2024-09-10 21:23:39"
+    },
+    {
+      "uuid": "040d1a7a619681336aa3e54865c890d1",
+      "puuid": "71c316bf023f2824ddf194084d807c65",
+      "title": "PCB_Esping_Connector",
+      "filename": "PCB_Esping_Connector.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "b7b02cdafc4f430fb4e60798fffb90ab": 24,
+        "3aa00974f24b49348db58e1899f55613": 38
+      },
+      "BOM": [],
+      "updateTime": 1725996259,
+      "createTime": 1725996259,
+      "histories": [],
+      "created_at": "2024-09-10 21:24:19",
+      "updated_at": "2024-09-10 21:24:19"
+    },
+    {
+      "uuid": "ba698ff8b43c427a72a451fde572e56b",
+      "puuid": "71c316bf023f2824ddf194084d807c65",
+      "title": "PCB_Esping_Mainboard",
+      "filename": "PCB_Esping_Mainboard.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "f8151fdc728a41ebbc304e11d39e5437": 3,
+        "7bdec8012728462a85919a4d0d033579": 2,
+        "b7b02cdafc4f430fb4e60798fffb90ab": 1,
+        "1337670005c6484c999f9b4c272ee9fe": 1,
+        "282f7786cb6144d097ae00194c3e3fb3": 1,
+        "9f77654394344f25b3de138e0fe05ff6": 3,
+        "fa8b3531a8854d41bcf2c462cb2bfc07": 2,
+        "557c105168d444a992e25584f55bcbb2": 2,
+        "a4d354a2f7b24c56ac4f3ee62e31a868": 1,
+        "398691f1f785460098bbe5ee6590333c": 4,
+        "f3d2a2ecf658447dac746eb15158a989": 1,
+        "5ca5015729764ac0b14d2bf8d2d3c85d": 1,
+        "2c940af5ffdd49f4bf699378f3aceff6": 2
+      },
+      "BOM": [],
+      "updateTime": 1725996383,
+      "createTime": 1725996290,
+      "histories": [],
+      "created_at": "2024-09-10 21:24:50",
+      "updated_at": "2024-09-10 21:26:23"
+    }
+  ],
+  "sort": [],
+  "title": "Esping",
+  "foldername": "Esping",
+  "schfilename": "Esping.json",
+  "schfilemtime": 1725996234784
+}
