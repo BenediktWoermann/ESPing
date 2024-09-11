@@ -4,7 +4,7 @@
   "name": "Esping",
   "content": "",
   "created_at": "2024-09-10 21:20:03",
-  "updated_at": "2024-09-10 21:26:23",
+  "updated_at": "2024-09-11 22:08:08",
   "stick": "",
   "documents": [
     {
@@ -415,22 +415,22 @@
     {
       "uuid": "040d1a7a619681336aa3e54865c890d1",
       "puuid": "71c316bf023f2824ddf194084d807c65",
-      "title": "PCB_Esping_Connector",
-      "filename": "PCB_Esping_Connector.json",
+      "title": "PCB_Esping_Connector_Special",
+      "filename": "PCB_Esping_Connector_Special.json",
       "description": "",
       "docType": "3",
       "master": "",
       "thumb": "/images/thumb-default.png",
       "components": {
-        "b7b02cdafc4f430fb4e60798fffb90ab": 24,
-        "3aa00974f24b49348db58e1899f55613": 38
+        "b7b02cdafc4f430fb4e60798fffb90ab": 10,
+        "3aa00974f24b49348db58e1899f55613": 8
       },
       "BOM": [],
-      "updateTime": 1725996259,
+      "updateTime": 1726084009,
       "createTime": 1725996259,
       "histories": [],
       "created_at": "2024-09-10 21:24:19",
-      "updated_at": "2024-09-10 21:24:19"
+      "updated_at": "2024-09-11 21:46:49"
     },
     {
       "uuid": "ba698ff8b43c427a72a451fde572e56b",
@@ -462,6 +462,26 @@
       "histories": [],
       "created_at": "2024-09-10 21:24:50",
       "updated_at": "2024-09-10 21:26:23"
+    },
+    {
+      "uuid": "0a6abc84393023f4b56b18eb62daf373",
+      "puuid": "71c316bf023f2824ddf194084d807c65",
+      "title": "PCB_Esping_Connector",
+      "filename": "PCB_Esping_Connector.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "3aa00974f24b49348db58e1899f55613": 64,
+        "b7b02cdafc4f430fb4e60798fffb90ab": 32
+      },
+      "BOM": [],
+      "updateTime": 1726084189,
+      "createTime": 1726077402,
+      "histories": [],
+      "created_at": "2024-09-11 19:56:42",
+      "updated_at": "2024-09-11 21:49:49"
     }
   ],
   "sort": [],
