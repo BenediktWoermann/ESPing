@@ -31,6 +31,10 @@ jobs:
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
     if: ${{ needs.set-runner.outputs.runner-label }} != "self-hosted"
     steps:
+      - name: Dump Runner Label
+        env:
+          RUNNER_LABEL: ${{ needs.set-runner.outputs.runner-label }}
+        run: echo "$RUNNER_LABEL"
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
