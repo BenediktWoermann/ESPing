@@ -29,16 +29,18 @@ jobs:
   prepare:
     needs: [set-runner, checkout]
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
-    if: false
     steps:
       - name: Dump Runner Label
         env:
           RUNNER_LABEL: ${{ needs.set-runner.outputs.runner-label }}
         run: echo "$RUNNER_LABEL"
-      - uses: actions/setup-python@v4
+      - name: Install Python
+        if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - name: Install PlatformIO Core
+        if: ${{ needs.check-runner.outputs.runner-label }} != "self-hosted"
         run: pip install --upgrade platformio
 
   build:
