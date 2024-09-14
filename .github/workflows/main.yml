@@ -33,12 +33,12 @@ jobs:
       - name: Echo label
         run: echo "test"
       - name: Install Python
-        if: !contains(needs.check-runner.outputs.runner-label, 'self-hosted')
+        if: ${{ !contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - name: Install PlatformIO Core
-        if: !contains(needs.check-runner.outputs.runner-label, 'self-hosted')
+        if: ${{ !contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}
         run: pip install --upgrade platformio
 
   build:
