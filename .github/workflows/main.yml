@@ -30,6 +30,8 @@ jobs:
     needs: [set-runner, checkout]
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
     steps:
+      - name: Echo label
+        run: echo '${{ needs.check-runner.outputs.runner-label }}'
       - name: Install Python
         if: !contains(needs.check-runner.outputs.runner-label, 'self-hosted')
         uses: actions/setup-python@v4
