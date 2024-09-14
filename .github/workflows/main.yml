@@ -50,4 +50,4 @@ jobs:
     if: ${{ needs.set-runner.outputs.runner-label }} == "self-hosted"
     steps:
       - name: Upload PlatformIO Project
-        run: pio run -t nobuild -t upload
+        run: pio run -t nobuild -t upload -e flashtest
