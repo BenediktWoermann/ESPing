@@ -33,7 +33,7 @@ jobs:
       - name: Dump Runner Label
         run: echo ${{ needs.set-runner.outputs.runner-label }}
       - name: Install Python
-        if: ${{ needs.check-runner.outputs.runner-label != 'self-hosted' }}
+        if: ${{ contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
