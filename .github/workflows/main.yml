@@ -29,7 +29,7 @@ jobs:
   prepare:
     needs: [set-runner, checkout]
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
-    if: ${{ needs.set-runner.outputs.runner-label }} != "self-hosted"
+    if: false
     steps:
       - name: Dump Runner Label
         env:
