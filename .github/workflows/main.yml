@@ -6,7 +6,7 @@ jobs:
   set-runner:
     runs-on: ubuntu-latest
     outputs:
-      runner-label: ${{ steps.set-runner.outputs.runner-label }}
+      output1: ${{ steps.set-runner.outputs.runner-label }}
 
     steps:
       - name: Set runner
@@ -24,30 +24,31 @@ jobs:
 
   checkout:
     needs: set-runner
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
+    runs-on: ${{needs.set-runner.outputs.output1}}
     steps:
       - uses: actions/checkout@v3
 
   prepare:
     needs: [set-runner, checkout]
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
+    runs-on: ${{needs.set-runner.outputs.output1}}
     steps:
       - name: Echo label
         run: |
-          echo "${{needs.set-runner.outputs.runner-label}}"
-          echo "${{ contains(${{needs.check-runner.outputs.runner-label}}, 'self-hosted') }}"
+          echo "${{ needs.set-runner.outputs.runner-label }}"
+          echo "${{ needs.set-runner.outputs.output1 }}"
+          echo "${{ needs.set-runner.outputs.output1 == 'self-hosted' }}"
       - name: Install Python
-        if: ${{ !contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}
+        if: ${{ !contains(needs.set-runner.outputs.output1, 'self-hosted') }}
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - name: Install PlatformIO Core
-        if: ${{ !contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}
+        if: ${{ !contains(needs.set-runner.outputs.output1, 'self-hosted') }}
         run: pip install --upgrade platformio
 
   build:
     needs: [set-runner, prepare]
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
+    runs-on: ${{needs.set-runner.outputs.output1}}
     steps:
       - name: Build PlatformIO Project
         run: pio run
@@ -55,7 +56,7 @@ jobs:
   flash-test:
     needs: [set-runner, build]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: ${{ needs.set-runner.outputs.runner-label }} == "self-hosted"
+    if: ${{ needs.set-runner.outputs.output1 }} == "self-hosted"
     steps:
       - name: Upload PlatformIO Project
         run: pio run -t nobuild -t upload -e flashtest
