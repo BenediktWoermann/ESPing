@@ -4,3 +4,4 @@ credentials.h
 *.env
 .DS_store
 log
+.vscode/*
