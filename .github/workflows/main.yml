@@ -62,7 +62,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') &&
-      ${{needs.set-runner.outputs.runner-label == 'self-hosted'}}
+      contains(needs.set-runner.outputs.runner-label, 'self-hosted')
     steps:
       - name: Upload PlatformIO Project
         run: |
