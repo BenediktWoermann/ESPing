@@ -33,7 +33,7 @@ jobs:
   prepare:
     needs: [set-runner, checkout]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: contains(needs.set-runner.outputs.runner-label, 'builtin')
+    if: ${{contains(needs.set-runner.outputs.runner-label, 'builtin')}}
     steps:
       - name: Install Python
         uses: actions/setup-python@v4
@@ -58,7 +58,7 @@ jobs:
   flash-test:
     needs: [set-runner, build]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: contains(needs.set-runner.outputs.runner-label, 'self-hosted')
+    if: ${{contains(needs.set-runner.outputs.runner-label, 'self-hosted')}}
     steps:
       - name: Upload PlatformIO Project
         run: |
