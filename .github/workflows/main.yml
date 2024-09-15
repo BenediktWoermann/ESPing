@@ -13,11 +13,13 @@ jobs:
         id: set-runner
         run: |
           runners=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.REPO_ACCESS_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners")
-          available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .busy == false and .labels[] .name == "self-hosted")')
+          available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .labels[].name == "self-hosted")')
           if [ -n "$available" ]; then
             echo "runner-label=self-hosted" >> $GITHUB_OUTPUT
+            echo "self-hosted"
           else
             echo "runner-label=ubuntu-latest" >> $GITHUB_OUTPUT
+            echo "built-in"
           fi
 
   checkout:
@@ -31,7 +33,11 @@ jobs:
     runs-on: ${{ needs.set-runner.outputs.runner-label }}
     steps:
       - name: Echo label
-        run: echo "test"
+        run: |
+          echo "${{ needs.set-runner.outputs.runner-label }}"
+          echo "${{ needs.set-runner.outputs.output1 }}"
+          echo "${{ contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}"
+          echo "${{ contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}"
       - name: Install Python
         if: ${{ !contains(needs.check-runner.outputs.runner-label, 'self-hosted') }}
         uses: actions/setup-python@v4
