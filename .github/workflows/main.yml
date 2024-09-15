@@ -27,7 +27,7 @@ jobs:
     runs-on: ${{needs.set-runner.outputs.runner-label}}
     needs: set-runner
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
   # Github runners need some preparation before executing build
   prepare:
