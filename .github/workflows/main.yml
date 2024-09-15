@@ -47,9 +47,9 @@ jobs:
     runs-on: ${{needs.set-runner.outputs.runner-label}}
     needs: [set-runner, prepare]
     if: |
-      always() &&
+      ${{always() &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled')}}
     steps:
       - name: Build PlatformIO Project
         run: pio run
@@ -59,10 +59,10 @@ jobs:
     runs-on: ${{needs.set-runner.outputs.runner-label}}
     needs: [set-runner, build]
     if: |
-      always() &&
+      ${{always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') &&
-      contains(needs.set-runner.outputs.runner-label, 'self-hosted')
+      needs.set-runner.outputs.runner-label == 'self-hosted'}}
     steps:
       - name: Upload PlatformIO Project
         run: |
