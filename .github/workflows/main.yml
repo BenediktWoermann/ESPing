@@ -58,7 +58,6 @@ jobs:
   flash-test:
     needs: [set-runner, build]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: ${{needs.set-runner.outputs.runner-label == 'self-hosted'}}
     steps:
       - name: Upload PlatformIO Project
         run: |
