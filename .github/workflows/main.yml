@@ -24,13 +24,13 @@ jobs:
 
   checkout:
     needs: set-runner
-    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - uses: actions/checkout@v3
 
   prepare:
     needs: [set-runner, checkout]
-    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - name: Echo label
         run: |
@@ -49,14 +49,14 @@ jobs:
 
   build:
     needs: [set-runner, prepare]
-    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - name: Build PlatformIO Project
         run: pio run
         
   flash-test:
     needs: [set-runner, build]
-    runs-on: ${{ needs.set-runner.outputs.runner-label }}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     if: ${{ needs.set-runner.outputs.runner-label }} == "self-hosted"
     steps:
       - name: Upload PlatformIO Project
