@@ -17,23 +17,23 @@ jobs:
           if [ -n "$available" ]; then
             echo "runner-label=self-hosted" >> $GITHUB_OUTPUT
           else
-            echo "runner-label=builtin" >> $GITHUB_OUTPUT
+            echo "runner-label=ubuntu-latest" >> $GITHUB_OUTPUT
           fi
       - name: Echo runner label
         run: |
-          echo "Runner with label ${{needs.set-runner.outputs.runner-label}} is used for subsequent jobs"
+          echo "Runner with label ${{steps.set-runner.outputs.runner-label}} is used for subsequent jobs"
 
   checkout:
     needs: set-runner
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
+    runs-on: ${{steps.set-runner.outputs.runner-label}}
     steps:
       - uses: actions/checkout@v3
 
   # Github runners need some preparation before executing build
   prepare:
     needs: [set-runner, checkout]
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: ${{contains(needs.set-runner.outputs.runner-label, 'builtin')}}
+    runs-on: ${{steps.set-runner.outputs.runner-label}}
+    if: ${{steps.set-runner.outputs.runner-label == 'ubuntu-latest'}}
     steps:
       - name: Install Python
         uses: actions/setup-python@v4
@@ -49,7 +49,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
+    runs-on: ${{steps.set-runner.outputs.runner-label}}
     steps:
       - name: Build PlatformIO Project
         run: pio run
@@ -57,8 +57,8 @@ jobs:
   # Test if flashing works (only possible with self-hosted runner)
   flash-test:
     needs: [set-runner, build]
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: ${{contains(needs.set-runner.outputs.runner-label, 'self-hosted')}}
+    runs-on: ${{steps.set-runner.outputs.runner-label}}
+    if: ${{steps.set-runner.outputs.runner-label == 'self-hosted'}}
     steps:
       - name: Upload PlatformIO Project
         run: |
