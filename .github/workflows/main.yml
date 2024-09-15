@@ -33,7 +33,7 @@ jobs:
   prepare:
     needs: [set-runner, checkout]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: ${{ !contains(needs.set-runner.outputs.runner-label, 'self-hosted') }}
+    if: !contains(needs.set-runner.outputs.runner-label, 'self-hosted')
     steps:
       - name: Install Python
         uses: actions/setup-python@v4
@@ -45,6 +45,10 @@ jobs:
   # Compile the SW
   build:
     needs: [set-runner, prepare]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - name: Build PlatformIO Project
