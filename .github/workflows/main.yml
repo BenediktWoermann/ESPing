@@ -24,15 +24,15 @@ jobs:
           echo "Runner with label ${{steps.set-runner.outputs.runner-label}} is used for subsequent jobs"
 
   checkout:
-    needs: set-runner
     runs-on: ${{needs.set-runner.outputs.runner-label}}
+    needs: set-runner
     steps:
       - uses: actions/checkout@v3
 
   # Github runners need some preparation before executing build
   prepare:
-    needs: [set-runner, checkout]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
+    needs: [set-runner, checkout]
     if: ${{needs.set-runner.outputs.runner-label == 'ubuntu-latest'}}
     steps:
       - name: Install Python
@@ -44,20 +44,25 @@ jobs:
 
   # Compile the SW
   build:
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     needs: [set-runner, prepare]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - name: Build PlatformIO Project
         run: pio run
 
   # Test if flashing works (only possible with self-hosted runner)
   flash-test:
-    needs: [set-runner, build]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
+    needs: [set-runner, build]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      ${{needs.set-runner.outputs.runner-label == 'self-hosted'}}
     steps:
       - name: Upload PlatformIO Project
         run: |
