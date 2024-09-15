@@ -3,11 +3,11 @@ name: PlatformIO CI
 on: [push]
 
 jobs:
+  # Check if self-hosted runner is available, else use a Github hosted one
   set-runner:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.set-runner.outputs.runner-label }}
-
+      runner-label: ${{steps.set-runner.outputs.runner-label}}
     steps:
       - name: Set runner
         id: set-runner
@@ -16,47 +16,48 @@ jobs:
           available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .labels[].name == "self-hosted")')
           if [ -n "$available" ]; then
             echo "runner-label=self-hosted" >> $GITHUB_OUTPUT
-            echo "self-hosted"
           else
-            echo "runner-label=ubuntu-latest" >> $GITHUB_OUTPUT
-            echo "built-in"
+            echo "runner-label=builtin" >> $GITHUB_OUTPUT
           fi
+      - name: Echo runner label
+        run: |
+          echo "Runner with label ${{needs.set-runner.outputs.runner-label}} is used for subsequent jobs"
 
   checkout:
     needs: set-runner
-    runs-on: ${{needs.set-runner.outputs.output1}}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - uses: actions/checkout@v3
 
+  # Github runners need some preparation before executing build
   prepare:
     needs: [set-runner, checkout]
-    runs-on: ${{needs.set-runner.outputs.output1}}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
+    if: ${{needs.set-runner.outputs.runner-label}} == "builtin"
     steps:
-      - name: Echo label
-        run: |
-          echo "${{ needs.set-runner.outputs.runner-label }}"
-          echo "${{ needs.set-runner.outputs.output1 }}"
-          echo "${{ needs.set-runner.outputs.output1 == 'self-hosted' }}"
       - name: Install Python
-        if: ${{ !contains(needs.set-runner.outputs.output1, 'self-hosted') }}
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - name: Install PlatformIO Core
-        if: ${{ !contains(needs.set-runner.outputs.output1, 'self-hosted') }}
         run: pip install --upgrade platformio
 
+  # Compile the SW
   build:
     needs: [set-runner, prepare]
-    runs-on: ${{needs.set-runner.outputs.output1}}
+    runs-on: ${{needs.set-runner.outputs.runner-label}}
     steps:
       - name: Build PlatformIO Project
         run: pio run
-        
+
+  # Test if flashing works (only possible with self-hosted runner)
   flash-test:
     needs: [set-runner, build]
     runs-on: ${{needs.set-runner.outputs.runner-label}}
-    if: ${{ needs.set-runner.outputs.output1 }} == "self-hosted"
+    if: ${{needs.set-runner.outputs.runner-label}} == "self-hosted"
     steps:
       - name: Upload PlatformIO Project
-        run: pio run -t nobuild -t upload -e flashtest
+        run: |
+          # Flash two times to make sure we can reflash from current build
+          pio run -t nobuild -t upload -e flashtest
+          pio run -t nobuild -t upload -e flashtest
