@@ -113,6 +113,8 @@ void setupRainMaker(){
   esp_rmaker_param_add_valid_str_list(mode.getParamHandle(), strs, 3);
   esping.addParam(mode);
 
+  // Enable OTA
+  esp_rmaker_ota_enable(NULL, OTA_USING_PARAMS);
   // Enable Scenes
   esp_rmaker_scenes_enable();
   esping.addCb(write_callback);
