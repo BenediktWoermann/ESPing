@@ -101,10 +101,10 @@ def get_program_ver(env) -> Tuple[str, str]:
 def rename_progname(env):
     project_name, project_name_src = get_program_name(env)
     project_ver, project_ver_src = get_program_ver(env)
-    progname = f"{project_name}-{project_ver}"
+    progname = f"{project_name}"
     print(
         f"RENAME: '{env['PROGNAME']}' --> '{progname}'"
-        f"\n  sourced from project_name({project_name_src}), project_ver({project_ver_src})"
+        f"\n  sourced from project_name({project_name_src})"
     )
 
     env.Replace(PROGNAME=progname)
