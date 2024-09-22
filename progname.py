@@ -29,7 +29,7 @@ PROG_VERSION_OPTION = "custom_prog_version"
 #: A filepath to read the version of the program from.
 PROG_VERSION_FPATH = "${PROJECT_PATH}/version.txt"
 #: The shell-command to collect the output of `git describe`.
-GIT_DESCRIBE_CMD = "git describe --always --long --dirty".split()
+GIT_DESCRIBE_CMD = "git describe --always --dirty".split()
 
 
 def fallback_get(*getters: Tuple[callable, str]):
