@@ -8,6 +8,7 @@
 
 #pragma region include
   #include <Arduino.h>
+  #include "AppInsights.h"
   #include "freertos/FreeRTOS.h"
   #include "RMaker.h"
   #include "esp_rmaker_scenes.h"
@@ -50,7 +51,7 @@ long colorBG = 0xFF8822;
 
 // BLE Credentils
 SimpleBLE ble;
-const char *service_name = "Esping";
+const char *service_name = "Esping_CI";
 const char *pop = "1234567";
 
 static uint8_t gpio_led = dataPin;
@@ -65,7 +66,7 @@ bool wifi_connected = 0;
 bool serviceSetup = 0;
 
 //The framework provides some standard device types like switch, lightbulb, fan, temperature sensor.
-static LightBulb esping("Esping", &gpio_led);
+static LightBulb esping("Esping_CI", &gpio_led);
 
 
 // const char* ssid = SSID;
@@ -88,16 +89,16 @@ void setupTasks(){
 void setup() {
   Serial.begin(115200);
   setupRainMaker();
-  setupLED();  
-  delay(50);
-  setupTasks();
+  //setupLED();  
+  //delay(50);
+  //setupTasks();
 }
 
 void setupRainMaker(){
   //------------------------------------------- Declaring Node -----------------------------------------------------//
   Node my_node;
-  my_node = RMaker.initNode("Woermi");
-
+  my_node = RMaker.initNode("CI");
+  
 
   //------------------------------------------- Adding Devices in Node -----------------------------------------------------//
   my_node.addDevice(esping);
@@ -235,31 +236,15 @@ void rainMakerReset(){
   }
 }
 
-void sysProvEvent(arduino_event_t *sys_event)
-{
+void sysProvEvent(arduino_event_t *sys_event) {
   switch (sys_event->event_id) {
     case ARDUINO_EVENT_PROV_START:
-#if CONFIG_IDF_TARGET_ESP32
       Serial.printf("\nProvisioning Started with name \"%s\" and PoP \"%s\" on BLE\n", service_name, pop);
-      printQR(service_name, pop, "ble");
-#else
-      Serial.printf("\nProvisioning Started with name \"%s\" and PoP \"%s\" on SoftAP\n", service_name, pop);
-      printQR(service_name, pop, "softap");
-#endif
+      WiFiProv.printQR(service_name, pop, "ble");
       break;
-    case ARDUINO_EVENT_WIFI_STA_CONNECTED:
-      Serial.printf("\nConnected to Wi-Fi!\n");
-      wifi_connected = 1;
-      delay(500);
-      break;
-    case ARDUINO_EVENT_PROV_CRED_RECV: {
-        Serial.println("\nReceived Wi-Fi credentials");
-        Serial.print("\tSSID : ");
-        Serial.println((const char *) sys_event->event_info.prov_cred_recv.ssid);
-        Serial.print("\tPassword : ");
-        Serial.println((char const *) sys_event->event_info.prov_cred_recv.password);
-        break;
-      }
+    case ARDUINO_EVENT_PROV_INIT:         wifi_prov_mgr_disable_auto_stop(10000); break;
+    case ARDUINO_EVENT_PROV_CRED_SUCCESS: wifi_prov_mgr_stop_provisioning(); break;
+    default:                              ;
   }
 }
 
