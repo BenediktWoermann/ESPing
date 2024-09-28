@@ -492,6 +492,7 @@
                 "ARDUINO_USB_MODE=1",
                 "ARDUINO_RUNNING_CORE=1",
                 "ARDUINO_EVENT_RUNNING_CORE=1",
+                "BOARD_HAS_PSRAM=1",
                 "HAVE_CONFIG_H",
                 "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"",
                 "UNITY_INCLUDE_CONFIG_H",
@@ -506,7 +507,7 @@
                 "ARDUINO=10812",
                 "ARDUINO_VARIANT=\"esp32s3\"",
                 "ARDUINO_BOARD=\"Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)\"",
-                "ARDUINO_PARTITION_rainmaker",
+                "ARDUINO_PARTITION_rainmaker_8MB",
                 ""
             ],
             "cStandard": "gnu99",

@@ -4,3 +4,5 @@ credentials.h
 *.env
 .DS_store
 log
+*.pyc
+__pycache__
