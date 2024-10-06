@@ -3,7 +3,7 @@
 #include <FastLED.h>
 
 void setupLED(){
-    LEDS.addLeds<WS2811, dataPin, GRB>(leds,ledQuantity);
+    FastLED.addLeds<WS2811, dataPin, RGB>(leds,ledQuantity);
     // FastLED.setMaxRefreshRate( 10 );
 
 

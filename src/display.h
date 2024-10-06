@@ -3,7 +3,7 @@
 #define ledQuantity 142
 #define ledRows 7
 #define ledColumns 22
-#define dataPin 26
+#define dataPin 22
 
 extern CRGB leds[ledQuantity];
 extern CRGB* display[ledRows][ledColumns];

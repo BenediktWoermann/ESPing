@@ -51,7 +51,7 @@ long colorBG = 0xFF8822;
 
 // BLE Credentils
 SimpleBLE ble;
-const char *service_name = "Esping_CI";
+const char *service_name = "Esping_Target_1";
 const char *pop = "1234567";
 
 static uint8_t gpio_led = dataPin;
@@ -66,7 +66,7 @@ bool wifi_connected = 0;
 bool serviceSetup = 0;
 
 //The framework provides some standard device types like switch, lightbulb, fan, temperature sensor.
-static LightBulb esping("Esping_CI", &gpio_led);
+static LightBulb esping("Esping_Target_1", &gpio_led);
 
 
 // const char* ssid = SSID;
@@ -89,15 +89,15 @@ void setupTasks(){
 void setup() {
   Serial.begin(115200);
   setupRainMaker();
-  //setupLED();  
-  //delay(50);
-  //setupTasks();
+  setupLED();  
+  delay(50);
+  setupTasks();
 }
 
 void setupRainMaker(){
   //------------------------------------------- Declaring Node -----------------------------------------------------//
   Node my_node;
-  my_node = RMaker.initNode("CI");
+  my_node = RMaker.initNode("Target");
   
 
   //------------------------------------------- Adding Devices in Node -----------------------------------------------------//
@@ -191,12 +191,12 @@ void ledTask(void* parameter){
 
 void wifiTask(void* parameter) {
 
-  const TickType_t xFrequency = 1000;
+  const TickType_t xFrequency = 10000;
   TickType_t xLastWakeTime;
   xLastWakeTime = xTaskGetTickCount();
 
   for(;;){
-    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+    xTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     // Try to reconnect when Wifi is lost
     if(WiFi.status() != WL_CONNECTED){
@@ -253,7 +253,7 @@ void write_callback(Device *device, Param *param, const param_val_t val, void *p
   const char *device_name = device->getDeviceName();
   const char *param_name = param->getParamName();
 
-  if (strcmp(device_name, "Esping") == 0)
+  if (strcmp(device_name, "Esping_Target_1") == 0)
   {
     if (strcmp(param_name, "Power") == 0)
     {
